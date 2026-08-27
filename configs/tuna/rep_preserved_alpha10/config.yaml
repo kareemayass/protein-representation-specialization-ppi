@@ -1,0 +1,45 @@
+model:
+  _target_: tuna.pl_modules.lit_ppi.LitPPI
+  model_backbone:
+    _target_: tuna.models._transformer.Transformer
+    protein_dim: 960
+    hid_dim: 64
+    ff_dim: 256
+    n_layers: 1
+    n_heads: 8
+    dropout: 0.2
+    llgp: true
+    use_spectral_norm: true
+    out_targets: 1
+    gp_config:
+      rff_features: 4096
+      gp_cov_momentum: -1
+      gp_ridge_penalty: 1
+      likelihood: binary_logistic
+  optimizer_config:
+    learning_rate: 0.0001
+    weight_decay: 1.0e-05
+    step_size: 2
+    gamma: 0.93
+dataset:
+  name: gold-standard-esmc-interpro-joint64-rep10
+  paths:
+    train: data/gold_standard/Intra1_interaction_1500_or_less.tsv
+    val: data/gold_standard/Intra0_interaction_1500_or_less.tsv
+    test: data/gold_standard/Intra2_interaction.tsv
+    embeddings: data/gold_standard/embeddings/esmc_300m_interpro_joint64_rep10_best_joint_embeddings.pt
+    fasta: data/gold_standard/human_swissprot_oneliner.fasta
+seed: 47
+wandb:
+  project: TUnA-R
+trainer:
+  max_epochs: 14
+  accelerator: gpu
+  devices: 1
+  precision: 32
+save_model:
+  save: true
+  save_dir: results/esmc_interpro_joint64_rep10/backbone
+datamodule:
+  batch_size: 16
+  max_sequence_length: 512

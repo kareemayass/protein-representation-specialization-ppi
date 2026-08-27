@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Scheduler / logs
+*.out
+*.err
+slurm-*.out
+logs/
+
+# Model weights
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Experiment outputs
+results/
+outputs/
+paper_results/
+wandb/
+
+# Large/local artifacts
+external/
+data/
+
+# Temporary files
+*.bak
+*.tmp
+*.swp
+*.before_*
+*~

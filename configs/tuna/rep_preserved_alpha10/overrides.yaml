@@ -1,0 +1,10 @@
+- model=tuna-esmc
+- dataset=gold-standard-esmc-interpro-joint64-rep10
+- trainer.max_epochs=14
+- trainer.accelerator=gpu
+- trainer.devices=1
+- trainer.precision=32
+- datamodule.batch_size=16
+- datamodule.max_sequence_length=512
+- save_model.save=true
+- save_model.save_dir=results/esmc_interpro_joint64_rep10/backbone

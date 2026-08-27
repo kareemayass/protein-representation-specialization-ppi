@@ -1,0 +1,9 @@
+# PPI dataset configuration
+name: gold-standard
+
+paths:
+  train: "data/gold_standard/Intra1_interaction_1500_or_less.tsv"
+  val: "data/gold_standard/Intra0_interaction_1500_or_less.tsv"
+  test: "data/gold_standard/Intra2_interaction.tsv"
+  embeddings: "data/gold_standard/embeddings/gold_standard_original_embeddings.pt"
+  fasta: "data/gold_standard/human_swissprot_oneliner.fasta"
