@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you reference this research code, cite this repository and the upstream methods listed in docs/attribution.md."
+type: software
+title: "Protein Representation Specialization and PPI Prediction"
+authors:
+  - family-names: Ayass
+    given-names: Kareem
+repository-code: "https://github.com/kareemayass/protein-representation-specialization-ppi"
+abstract: "Research code for protein representation adaptation, InterPro Domain specialization, representation preservation, and leakage-reduced PPI evaluation."
+keywords:
+  - protein representation learning
+  - protein-protein interaction
+  - transfer learning
+  - computational biology

@@ -31,7 +31,8 @@ cd "$REPO_ROOT"
 module load python/3.13.2
 source "$VENV/bin/activate"
 
-export PYTHONPATH="$PROJECT/src:$PROJECT"
+# Keep repository code importable when the artifact directory is elsewhere.
+export PYTHONPATH="$REPO_ROOT/src:$PROJECT/src:$PROJECT${PYTHONPATH:+:$PYTHONPATH}"
 
 export HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}"
 export HF_HUB_OFFLINE=1

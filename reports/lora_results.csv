@@ -1,0 +1,3 @@
+condition,n_pairs,accuracy,mcc,recall,specificity,auprc,source
+Pretrained TUnA ESM-2,52048,0.647,0.294,0.638,0.656,0.682,Project report Table1 p5
+LoRA-r8,52048,0.649,0.301,0.720,0.578,0.669,Project report Table1 p5

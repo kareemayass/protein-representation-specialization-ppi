@@ -2,6 +2,72 @@
 
 This document maps the principal experiment branches to the code and configurations retained in this repository.
 
+## Start here: three levels of reproduction
+
+| Level | What runs | Requirements | What it establishes |
+|---|---|---|---|
+| CPU inspection | `python examples/demo.py`; `python -m unittest discover -s tests -v` | Python 3.11+, standard library; Bash for Slurm path checks | Synthetic pair-audit behavior and selected curriculum/portability invariants |
+| Report visualization | `python scripts/reporting/plot_reported_results.py` | Matplotlib | Regenerates the README figure from transcribed aggregate results |
+| Research experiments | Training, evaluation, geometry, and fusion scripts below | Full research environment, GPUs where applicable, external data/weights/predictions, compatible TUnA-R | Requires additional artifacts; not reproduced by the CPU checks |
+
+Run commands from the repository root unless stated otherwise. The lightweight CLI is documented in [examples/README.md](examples/README.md); the scientific design is in [docs/methods.md](docs/methods.md).
+
+## Research environment
+
+`requirements.txt` retains the package versions recorded for the experiments. It is a package list, not a complete lockfile with Python/CUDA/transitive dependency hashes. The Slurm recipes load Python 3.13.2; the dependency-free companion checks support Python 3.11–3.13. A clean installation of the research stack has not been validated as part of this refresh.
+
+On a compatible GPU host, create a dedicated environment and install the recorded requirements:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
+```
+
+ESMC access/model-cache requirements and CUDA compatibility must be satisfied on that host. The production scripts set `HF_HUB_OFFLINE=1` and `TRANSFORMERS_OFFLINE=1`; populate the model cache before submitting jobs. Installing packages does not supply the datasets or trained checkpoints.
+
+## Artifact layout and HPC launch
+
+Set `INTERPRO_PROJECT_ROOT` to the external InterPro data/results tree, `TUNA_ROOT` to a compatible TUnA-R checkout, and `VENV` to your research environment. The wrappers default `VENV` to `$TUNA_ROOT/.venv`; override it when using the repository's `.venv`.
+
+The representation-preservation trainer expects the split directory
+`$INTERPRO_PROJECT_ROOT/data/processed/top100_domain_pipeline_v1/splits_top64_length_filtered_v1/` containing:
+
+| Artifact | Purpose |
+|---|---|
+| `SUCCESS`, `selected_domains.txt` | Preparation marker and the ordered list of 64 Domain IDs |
+| `train.fasta`, `validation.fasta` | Protein sequences |
+| `train_annotations.tsv.gz`, `validation_annotations.tsv.gz` | Localization annotations |
+| `train_balanced_domain_targets.tsv.gz`, `validation_balanced_domain_targets.tsv.gz` | Domain-identification targets |
+| `train_balanced_domain_target_annotations.tsv.gz`, `validation_balanced_domain_target_annotations.tsv.gz` | Target-region annotations |
+
+This is the trainer's input contract, not a supplied dataset. Annotations use `protein_accession`, `interpro_id`, `start`, and `end`; residue coordinates are **1-based inclusive**. See [data.py](src/interpro_joint/data.py) for validation and Stage 2 target schemas. End-to-end test evaluation additionally requires the test FASTA, resolvable-region audit files, trained checkpoints, and validation-selected decoding settings referenced in its wrapper.
+
+Before submission, adjust cluster module names, GPU/resource directives, and environment paths. The representation-preservation recipe requests **four H100 GPUs**; this is the retained production configuration, not a measured minimum requirement. Create the log directory **before** calling `sbatch`, since Slurm opens log files before the script runs:
+
+```bash
+export INTERPRO_PROJECT_ROOT=/absolute/path/to/interpro-artifacts
+export TUNA_ROOT=/absolute/path/to/TUnA-R
+export VENV="$PWD/.venv"
+mkdir -p logs
+sbatch scripts/interpro_training/run_joint_rep_preserve_alpha10_production.slurm
+```
+
+The wrappers preserve repository imports even when artifacts reside elsewhere. They remain site-specific launch recipes, not a portable scheduler abstraction. The representation-preservation wrapper now exits on failed shell commands so a failed prerequisite or distributed job does not continue into its success-summary stage.
+
+### TUnA integration boundary
+
+Only two project-specific TUnA Python files are bundled. The imports in `src/tuna/train.py` require external modules including `tuna.datamodule.ppi_module` and `tuna.inference.export`, and the frozen Hydra configurations require `tuna.models._transformer`. Merely adding this repository to `PYTHONPATH` does not provide those modules or guarantee that its partial `tuna` directory overrides an installed upstream package.
+
+Use an isolated compatible upstream checkout, review and apply the retained project modifications there, and resolve config/data paths against that checkout. The exact upstream URL/revision was not recorded here, so this guide does not invent a clone command or claim a verified end-to-end invocation. Record the chosen upstream revision and environment before attempting reproduction.
+
+### Historical fidelity and results provenance
+
+The original Standard-specialization result and checkpoint lineage were preserved, but some shared source files were revised before repository assembly. Retained implementations correspond to the reported method where exact historical bytes were unavailable. Do not describe this release as exact recovery of every original run.
+
+The [report tables](reports/README.md) are transcribed from the supplied project report. They support inspection of the research, but cannot replace raw predictions for checking metrics, confidence intervals, or pair-level analyses. No GPU experiments were rerun during this repository refresh.
+
 ## 1. PPI-specific LoRA adaptation
 
 Analysis code:
@@ -121,4 +187,6 @@ The following are not stored in Git:
 - intermediate prediction files
 - analysis outputs
 
-External locations are configured through `INTERPRO_PROJECT_ROOT` and `TUNA_ROOT`.
+Many training/evaluation scripts resolve artifacts through `INTERPRO_PROJECT_ROOT` and `TUNA_ROOT`. The historical LoRA analyses also retain relative paths such as `results/`, `internal/`, and `paper_results/`; inspect their module-level constants and provide the matching artifact layout before running them. Do not assume the two environment variables configure every script.
+
+To make a future experimental release fully auditable, retain the preprocessing scripts and dataset manifests/hashes, original LoRA training entry point, upstream TUnA-R revision, environment lock, checkpoint hashes, and pair-level predictions. Exported results should identify their split, selection criterion, threshold convention, and annotation-eligible population.
