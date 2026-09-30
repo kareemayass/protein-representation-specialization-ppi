@@ -1,0 +1,5 @@
+condition,ppi_accuracy,ppi_auprc,domain_localization_f1,domain_oracle_accuracy,domain_end_to_end_f1,knn50_preservation,cosine_spearman,linear_cka,source
+Base ESMC,0.6467,0.6954,,,,1.0,1.0,1.0,Project report p7 and Fig2
+Standard specialization,0.6063,0.6422,0.7617,0.9857,0.7579,0.130,0.399,0.394,Project report p7 and Fig2
+MLM preservation,0.6122,0.6398,,,,0.136,0.459,0.478,Project report p7 and Fig2
+Representation preservation,0.6454,0.6919,0.7382,0.9839,0.7340,0.458,0.837,0.915,Project report p7 and Fig2

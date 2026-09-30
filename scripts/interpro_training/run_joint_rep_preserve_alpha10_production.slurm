@@ -10,6 +10,8 @@
 #SBATCH --error=logs/rep10_prod_%j.err
 
 
+set -euo pipefail
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 PROJECT="${INTERPRO_PROJECT_ROOT:-$REPO_ROOT}"
 TUNA_ROOT="${TUNA_ROOT:-$REPO_ROOT/external/TUnA-R}"
@@ -32,7 +34,8 @@ cd "$REPO_ROOT"
 module load python/3.13.2
 source "$VENV/bin/activate"
 
-export PYTHONPATH="$PROJECT/src:$PROJECT"
+# Keep repository code importable when the artifact directory is elsewhere.
+export PYTHONPATH="$REPO_ROOT/src:$PROJECT/src:$PROJECT${PYTHONPATH:+:$PYTHONPATH}"
 export HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}"
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
@@ -123,6 +126,7 @@ cat "$PLAN_PATH"
 echo
 
 srun bash -c '
+set -euo pipefail
 
 export RANK=$SLURM_PROCID
 export LOCAL_RANK=$SLURM_LOCALID

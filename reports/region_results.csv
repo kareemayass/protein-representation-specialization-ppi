@@ -1,0 +1,3 @@
+region,n_eligible_pairs,coverage_percent,region_only_auprc,matched_base_auprc,fused_auprc,source
+Domain,28525,54.8,0.6228,0.6745,0.6847,Project report Table2 p9
+Family,38321,73.6,0.6421,0.7075,0.7119,Project report Table2 p9
