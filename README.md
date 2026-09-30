@@ -1,18 +1,26 @@
-# When biological specialization helps—and hurts—PPI prediction
+# Protein representation adaptation: what improves, and what transfers?
 
 **Protein representation learning · Transfer learning · Leakage-reduced evaluation**
 
 Research by **Kareem Ayass**, BSc Honours Computer Science and Biology, McGill University. Conducted in the **COMBINE Lab**, supervised by **Prof. Amin Emad**.
 
-**Can a protein language model learn more biology while retaining the representations needed to distinguish interaction partners?** This project investigates that question through PPI-directed LoRA adaptation, InterPro Domain supervision, and preservation of pretrained ESMC representations.
+**Does adapting a protein language model improve discrimination between interaction partners, or mainly change protein-level interaction tendencies?** This project investigates that distinction through PPI-directed LoRA adaptation, endpoint-effect analysis, and biologically supervised representation learning.
 
-The central finding is a transfer-learning trade-off: **accurate Domain prediction did not produce better PPI predictions.** Direct representation preservation recovered most of the lost PPI performance, while protein-level audits showed why a small accuracy gain from PPI adaptation was not evidence of better partner discrimination.
+The lead finding is that **protein-disjoint generalization does not, by itself, establish partner-specific learning**. Although joint LoRA-r8/TUnA adaptation slightly increased accuracy, it reduced AUPRC and within-protein partner ranking. Its protein-level score effects were predictable for unseen proteins from frozen pretrained **ESM-2** representations: a PCA–ridge model fitted on Intra0 transferred to **3,022 protein-disjoint Intra2 proteins** with **R² = 0.370** and **Spearman ρ = 0.667**.
+
+This identifies a useful evaluation distinction: a model can generalize protein-level tendencies to new proteins without becoming better at deciding *which partners those proteins interact with*. It does not establish identity leakage or show that all protein-level signal is biologically invalid.
 
 [Results & interpretation](docs/results.md) · [Methods](docs/methods.md) · [Code guide](docs/code-guide.md) · [Reproduce & run](REPRODUCIBILITY.md)
 
-![Reported Intra2 PPI AUPRC and held-out Domain F1 across encoder conditions. Representation preservation recovers PPI transfer while retaining most Domain performance.](docs/assets/transfer-summary.svg)
+![PPI adaptation diagnostics: endpoint effects transfer from frozen ESM-2 embeddings to unseen proteins, while accuracy gains coexist with reduced AUPRC and within-anchor partner ranking.](docs/assets/lora-diagnostics.svg)
 
-*Values transcribed from the project report; this figure is regenerated from [the checked-in summary](reports/transfer_results.csv), not from a new training run. All PPI conditions above use the same 52,048-pair Intra2 partition. See [provenance](reports/README.md).*
+*Source: Table 1 and Figure 1 of the project report. The figure uses [reported metrics](reports/lora_results.csv) and [diagnostic summaries](reports/lora_diagnostics.csv). Cross-split transfer uses frozen ESM-2 features and PCA–ridge. The endpoint regression within Intra2 and the transfer to unseen proteins are separate analyses. See [provenance](reports/README.md).*
+
+### Why this matters for evaluation
+
+Checking that test proteins are absent from training is necessary for this benchmark's intended generalization setting, but it does not tell us which transferable features drive predictions. The report therefore combines pair-aligned changes, endpoint decomposition, embedding-based transfer, and within-anchor ranking. Together, these analyses separate **prediction changes associated with a protein** from **improved discrimination among its candidate partners**.
+
+A complementary branch asks whether explicit Domain supervision makes representations more useful for PPI. It reveals a second constraint: accurate biological annotation can coexist with disrupted downstream transfer, while preserving intermediate representations recovers most of that loss.
 
 ## The investigation
 
@@ -24,10 +32,16 @@ The central finding is a transfer-learning trade-off: **accurate Domain predicti
 
 These are distinct ESM-2 and ESMC experiment families; their baselines should not be conflated. Representation preservation **approached the ESMC baseline**, rather than surpassing it. [Full results, subset comparisons, and limitations →](docs/results.md)
 
+## Complementary result: biological enrichment and transfer
+
+![Reported Intra2 PPI AUPRC and held-out Domain F1 across ESMC encoder conditions. Representation preservation recovers PPI transfer while retaining most Domain performance.](docs/assets/transfer-summary.svg)
+
+*Reported ESMC results from the project report, regenerated from [the transfer summary](reports/transfer_results.csv). All PPI conditions use the same 52,048-pair Intra2 partition; Domain F1 uses a separate InterPro test set. No experiments were rerun.*
+
 ## Research and implementation contributions
 
-- **Representation adaptation:** joint Domain localization and masked-region identification, with curriculum training and LoRA; compare MLM and intermediate-feature preservation. [Training code](scripts/interpro_training/) · [Preservation loss](src/interpro_joint/representation_regularization.py)
 - **Generalization analysis:** pair-aligned score changes, endpoint-effect decomposition, transfer to unseen proteins, and ranking among alternative partners of the same anchor. [Analysis code](scripts/lora/)
+- **Representation adaptation:** joint Domain localization and masked-region identification, with curriculum training and LoRA; compare MLM and intermediate-feature preservation. [Training code](scripts/interpro_training/) · [Preservation loss](src/interpro_joint/representation_regularization.py)
 - **Large-scale training:** token-budget batching, distributed task scheduling, gradient accumulation, and resumable HPC runs over a processed InterPro dataset of **907,958 proteins**. [Batching](src/interpro_stage1/batching.py) · [Curriculum](src/interpro_joint/curriculum.py) · [Runtime](src/interpro_joint/runtime.py)
 - **Mechanistic follow-up:** nearest-neighbour preservation, cosine geometry, linear CKA, and explicit Domain/Family compatibility with validation-fitted late fusion. [Geometry](scripts/geometry/) · [Functional regions](scripts/functional_regions/)
 
@@ -46,7 +60,7 @@ The project builds on **TUnA/TUnA-R, ESM-2, ESMC, PEFT, InterPro, and the Bernet
 
 ## Reproducibility status
 
-**Available now:** research implementations, retained configurations and Slurm launch arguments, report-derived summary tables, and a regenerable figure.
+**Available now:** research implementations, retained configurations and Slurm launch arguments, report-derived summary tables, and regenerable figures.
 
 **Needed for full experiments:** processed datasets, embedding exports, trained checkpoints, original prediction files, and a compatible TUnA-R checkout. These artifacts and the data-preparation pipeline are **not included**. The original LoRA training entry point and an exact upstream TUnA-R revision are also not retained here. Some shared Standard-specialization source files were revised before this repository was assembled; the retained method implementation is not a byte-for-byte historical snapshot.
 

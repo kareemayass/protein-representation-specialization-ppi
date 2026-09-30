@@ -6,7 +6,7 @@ This document maps the principal experiment branches to the code and configurati
 
 | Level | What runs | Requirements | What it establishes |
 |---|---|---|---|
-| Report visualization | `python scripts/reporting/plot_reported_results.py` | Matplotlib | Regenerates the README figure from transcribed aggregate results |
+| Report visualization | Commands in [reports/README.md](reports/README.md) | Matplotlib | Regenerates both README figures from transcribed aggregate results |
 | Research experiments | Training, evaluation, geometry, and fusion scripts below | Full research environment, GPUs where applicable, external data/weights/predictions, compatible TUnA-R | Requires additional artifacts; not rerun during this documentation update |
 
 Run commands from the repository root unless stated otherwise. The scientific design is in [docs/methods.md](docs/methods.md).

@@ -15,6 +15,16 @@ Among 6,469 class changes, 3,282 corrected a prediction and 3,187 broke one: **9
 
 The additive endpoint model explained held-out score-change variance of **R² = 0.396**, compared with **0.058** for pair-level baseline-score controls; the combined model reached **0.452**. This diagnostic used pair-wise cross-validation *within* Intra2 so endpoint effects could be estimated on one partner and evaluated on another. It is not a claim of protein-disjoint generalization for that regression. A separate embedding-based transfer analysis on 3,022 unseen Intra2 proteins gave **R² = 0.370** and Spearman **ρ = 0.667**.
 
+### Why the unseen-protein transfer result matters
+
+The embedding-transfer pipeline mean-pooled and L2-normalized frozen pretrained **ESM-2** features, selected PCA/ridge settings within Intra0, then applied the fitted pipeline unchanged to protein-disjoint Intra2. Independently estimated Intra2 endpoint coefficients served only as evaluation targets. The reported **R² = 0.370** and **ρ = 0.667** therefore show that endpoint-associated adaptation effects were predictable from representations of proteins absent from the regression's fitting set.
+
+Embedding-space similarity is a useful intuition for why separating identities need not remove shared predictive structure. However, the reported experiment is **PCA–ridge transfer, not nearest-neighbour prediction**, and it uses **ESM-2, not ESMC**. It does not directly establish that local neighbours share the same effect, or identify which biological features explain the association.
+
+This is useful because generalizing to unseen proteins and learning partner-specific compatibility are distinct achievements. The mean within-anchor AUROC fell from **0.691 to 0.684**, while the adaptation-associated score change alone reached **0.572**. Thus, transferable endpoint effects coexisted with weaker partner ranking in this experiment.
+
+![LoRA diagnostics and transfer of endpoint effects to unseen proteins.](assets/lora-diagnostics.svg)
+
 The report's same-anchor analyses did not show improved partner ranking. Protein-disjoint evaluation can therefore still contain transferable protein-level propensities. Endpoint-associated effects are **not themselves proof of train/test identity leakage**. Because the LoRA parameters and TUnA head were jointly optimized, the score changes cannot be attributed to LoRA alone.
 
 Source: Table 1 and Figure 1, pp. 5–6. [Retained analysis scripts](../scripts/lora/)

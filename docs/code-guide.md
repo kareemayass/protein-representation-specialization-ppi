@@ -11,6 +11,7 @@ Start with the research question in the [README](../README.md), then follow the 
 | Joint distributed optimization | [engine_rep_preserve.py](../src/interpro_joint/engine_rep_preserve.py) | Task losses, gradient accumulation, and reduction of loss denominators |
 | Production training | [train_joint_curriculum_rep_preserve.py](../scripts/interpro_training/train_joint_curriculum_rep_preserve.py) | Training orchestration; paired with a retained Slurm recipe |
 | Endpoint-effect analysis | [analyse_endpoint_structure.py](../scripts/lora/analyse_endpoint_structure.py) | Sparse endpoint design, nested ridge selection, held-out score-change analysis |
+| Transfer to unseen proteins | [analyse_lora_r8_embedding_transfer.py](../scripts/lora/analyse_lora_r8_embedding_transfer.py) | Frozen ESM-2 features; Intra0-selected PCA–ridge applied unchanged to protein-disjoint Intra2 |
 | Within-anchor discrimination | [analyse_lora_r8_same_anchor.py](../scripts/lora/analyse_lora_r8_same_anchor.py) | Ranking positive and negative partners for the same protein |
 | Representation-space analysis | [audit_final_embedding_geometry.py](../scripts/geometry/audit_final_embedding_geometry.py) | Neighbour preservation, sampled cosine geometry, and linear CKA |
 | Partner-level biological features | [train_learned_domain_compatibility.py](../scripts/functional_regions/train_learned_domain_compatibility.py) | Symmetric region comparison and pair-level compatibility |

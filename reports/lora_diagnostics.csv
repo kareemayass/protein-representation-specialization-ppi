@@ -1,0 +1,14 @@
+analysis,quantity,value,population,source
+pair_transitions,false_negatives_recovered,2694,52048 Intra2 pairs,Project report Fig1A p6
+pair_transitions,true_negatives_lost,2629,52048 Intra2 pairs,Project report Fig1A p6
+pair_transitions,false_positives_corrected,588,52048 Intra2 pairs,Project report Fig1A p6
+pair_transitions,true_positives_lost,558,52048 Intra2 pairs,Project report Fig1A p6
+endpoint_regression,pair_controls_r2,0.058,Pair-wise cross-validation within Intra2,Project report Fig1C p6
+endpoint_regression,protein_identity_r2,0.396,Pair-wise cross-validation within Intra2,Project report Fig1C p6
+endpoint_regression,combined_r2,0.452,Pair-wise cross-validation within Intra2,Project report Fig1C p6
+partner_discrimination,pretrained_mean_within_anchor_auroc,0.691,Eligible Intra2 anchors with positive and negative partners,Project report Fig1D p6
+partner_discrimination,lora_mean_within_anchor_auroc,0.684,Eligible Intra2 anchors with positive and negative partners,Project report Fig1D p6
+partner_discrimination,delta_score_mean_within_anchor_auroc,0.572,Eligible Intra2 anchors with positive and negative partners,Project report Fig1D p6
+unseen_protein_transfer,r2,0.370,3022 unseen Intra2 proteins,Project report Fig1E p6
+unseen_protein_transfer,spearman_rho,0.667,3022 unseen Intra2 proteins,Project report Fig1E p6
+unseen_protein_transfer,n_proteins,3022,Unseen Intra2 proteins,Project report Fig1E p6
