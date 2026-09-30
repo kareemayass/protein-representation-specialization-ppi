@@ -14,12 +14,5 @@ Start with the research question in the [README](../README.md), then follow the 
 | Within-anchor discrimination | [analyse_lora_r8_same_anchor.py](../scripts/lora/analyse_lora_r8_same_anchor.py) | Ranking positive and negative partners for the same protein |
 | Representation-space analysis | [audit_final_embedding_geometry.py](../scripts/geometry/audit_final_embedding_geometry.py) | Neighbour preservation, sampled cosine geometry, and linear CKA |
 | Partner-level biological features | [train_learned_domain_compatibility.py](../scripts/functional_regions/train_learned_domain_compatibility.py) | Symmetric region comparison and pair-level compatibility |
-| Lightweight release checks | [ppi_audit](../src/ppi_audit/predictions.py), [tests](../tests/) | Strict unordered-pair alignment and a CPU-only example; companion tooling added for this repository |
 
-The research scripts retain their original organization to preserve readable links to experiment history. The lightweight audit is a separate companion; it does not silently replace the historical analysis functions or their threshold conventions.
-
-## Reading the tests
-
-CPU checks exercise scientific invariants: pairs are unordered, comparisons must contain identical labels and pair sets, overlapping endpoint identities invalidate a protein-disjoint claim, and every simulated rank must choose the same curriculum task at the same optimizer step. Slurm checks ensure the external artifact directory does not hide repository modules.
-
-These checks do not run ESMC, distributed GPU optimization, TUnA inference, or the complete historical analyses. See [reproducibility](../REPRODUCIBILITY.md) for those dependencies.
+The research scripts retain their original organization to preserve readable links to experiment history. See [reproducibility](../REPRODUCIBILITY.md) for the dependencies and artifacts required to run them.

@@ -4,7 +4,7 @@
 
 Kareem Ayass conducted this undergraduate research project in McGill University's COMBINE Lab under Prof. Amin Emad. The associated report is titled *Protein representation adaptation reveals constraints on partner-specific PPI prediction*.
 
-The project investigates PPI-directed adaptation, InterPro-supervised specialization, preservation objectives, downstream transfer, endpoint-associated effects, representation geometry, and functional-region compatibility. Research modules and scripts retained here support those investigations. The repository's small `ppi_audit` utility, synthetic example, result-plotting script, and CPU tests are companion tooling for inspecting this release, not evidence that those tools produced the original results.
+The project investigates PPI-directed adaptation, InterPro-supervised specialization, preservation objectives, downstream transfer, endpoint-associated effects, representation geometry, and functional-region compatibility. Research modules and scripts retained here support those investigations. The result-plotting script was added to visualize reported aggregate values; it did not produce the original experimental results.
 
 ## Upstream work
 

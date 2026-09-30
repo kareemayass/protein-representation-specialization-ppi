@@ -9,7 +9,7 @@
 
 The report describes MMseqs2 clustering at 30% sequence identity and 60% bidirectional coverage for InterPro proteins of at least 30 residues, with connected components assigned to a single partition. Shorter sequences were grouped by exact identity. Domain classes required at least 5,000 training targets and 250 targets in each held-out partition. Preprocessing is described in the report but its implementation and split artifacts are not included.
 
-Intra0 was used for model selection; Intra2 for final PPI evaluation. Retrospective endpoint analyses on Intra2 characterize frozen predictions and must not be reused as a model-selection procedure. The CPU overlap utility checks identifiers only; it cannot verify sequence-similarity separation.
+Intra0 was used for model selection; Intra2 for final PPI evaluation. Retrospective endpoint analyses on Intra2 characterize frozen predictions and must not be reused as a model-selection procedure.
 
 ## Two adaptation branches
 

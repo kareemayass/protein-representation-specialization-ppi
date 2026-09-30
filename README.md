@@ -33,19 +33,6 @@ These are distinct ESM-2 and ESMC experiment families; their baselines should no
 
 The project builds on **TUnA/TUnA-R, ESM-2, ESMC, PEFT, InterPro, and the Bernett benchmark**. Those models, resources, and benchmark design are upstream work. This repository retains the project's adaptations and analyses; [attribution and source lineage](docs/attribution.md) distinguish them.
 
-## Try it locally — no GPU or downloads
-
-From the repository root, with Python 3.11 or newer:
-
-```bash
-python examples/demo.py
-python -m unittest discover -s tests -v
-```
-
-The demo compares six **synthetic** prediction pairs, deliberately shuffled and reversed between files. It shows one corrected prediction and one broken prediction: recall rises, specificity falls, and accuracy stays unchanged. It also runs the **actual research curriculum scheduler** on a 40-step example (25 localization steps, 15 identification steps).
-
-This is a runnable explanation of the evaluation logic, **not a pretrained PPI inference demo or a reproduction of the paper's results**. A [small CLI](examples/README.md) can also audit your own prediction TSVs and exact protein overlap between splits.
-
 ## Navigate the repository
 
 | Area | Purpose |
@@ -56,15 +43,14 @@ This is a runnable explanation of the evaluation logic, **not a pretrained PPI i
 | [`scripts/`](scripts/) | Training, evaluation, geometry, LoRA audits, and functional-region analyses |
 | [`configs/`](configs/) | Retained LoRA settings and downstream Hydra snapshots |
 | [`reports/`](reports/), [`docs/`](docs/) | Reported metrics, interpretation, methods, and source map |
-| [`examples/`](examples/), [`src/ppi_audit/`](src/ppi_audit/), [`tests/`](tests/) | Lightweight companion demo, prediction validation, and CPU checks |
 
 ## Reproducibility status
 
-**Available now:** research implementations, retained configurations and Slurm launch arguments, report-derived summary tables, a regenerable figure, and dependency-free CPU checks.
+**Available now:** research implementations, retained configurations and Slurm launch arguments, report-derived summary tables, and a regenerable figure.
 
 **Needed for full experiments:** processed datasets, embedding exports, trained checkpoints, original prediction files, and a compatible TUnA-R checkout. These artifacts and the data-preparation pipeline are **not included**. The original LoRA training entry point and an exact upstream TUnA-R revision are also not retained here. Some shared Standard-specialization source files were revised before this repository was assembled; the retained method implementation is not a byte-for-byte historical snapshot.
 
-The [reproducibility guide](REPRODUCIBILITY.md) distinguishes what can run immediately from what requires those artifacts. CPU checks do not establish successful GPU training or reproduce the reported metrics.
+The [reproducibility guide](REPRODUCIBILITY.md) documents the environment, input artifacts, and retained experiment entry points. Full training and evaluation require the external artifacts listed above.
 
 ## Scientific scope
 

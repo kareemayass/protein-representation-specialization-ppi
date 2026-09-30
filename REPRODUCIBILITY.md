@@ -2,19 +2,18 @@
 
 This document maps the principal experiment branches to the code and configurations retained in this repository.
 
-## Start here: three levels of reproduction
+## Reproduction scope
 
 | Level | What runs | Requirements | What it establishes |
 |---|---|---|---|
-| CPU inspection | `python examples/demo.py`; `python -m unittest discover -s tests -v` | Python 3.11+, standard library; Bash for Slurm path checks | Synthetic pair-audit behavior and selected curriculum/portability invariants |
 | Report visualization | `python scripts/reporting/plot_reported_results.py` | Matplotlib | Regenerates the README figure from transcribed aggregate results |
-| Research experiments | Training, evaluation, geometry, and fusion scripts below | Full research environment, GPUs where applicable, external data/weights/predictions, compatible TUnA-R | Requires additional artifacts; not reproduced by the CPU checks |
+| Research experiments | Training, evaluation, geometry, and fusion scripts below | Full research environment, GPUs where applicable, external data/weights/predictions, compatible TUnA-R | Requires additional artifacts; not rerun during this documentation update |
 
-Run commands from the repository root unless stated otherwise. The lightweight CLI is documented in [examples/README.md](examples/README.md); the scientific design is in [docs/methods.md](docs/methods.md).
+Run commands from the repository root unless stated otherwise. The scientific design is in [docs/methods.md](docs/methods.md).
 
 ## Research environment
 
-`requirements.txt` retains the package versions recorded for the experiments. It is a package list, not a complete lockfile with Python/CUDA/transitive dependency hashes. The Slurm recipes load Python 3.13.2; the dependency-free companion checks support Python 3.11–3.13. A clean installation of the research stack has not been validated as part of this refresh.
+`requirements.txt` retains the package versions recorded for the experiments. It is a package list, not a complete lockfile with Python/CUDA/transitive dependency hashes. The Slurm recipes load Python 3.13.2. A clean installation of the research stack has not been validated as part of this refresh.
 
 On a compatible GPU host, create a dedicated environment and install the recorded requirements:
 

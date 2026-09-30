@@ -1,7 +1,0 @@
-protein_A	protein_B	label	score
-toy_A	toy_B	1	0.80
-toy_A	toy_C	0	0.20
-toy_D	toy_E	1	0.40
-toy_D	toy_F	0	0.45
-toy_G	toy_H	1	0.90
-toy_G	toy_I	0	0.10
